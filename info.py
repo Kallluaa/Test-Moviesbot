@@ -1,0 +1,111 @@
+import re
+from os import environ
+from Script import script
+import time
+
+id_pattern = re.compile(r'^.\d+$')
+def is_enabled(value, default):
+    if value.lower() in ["true", "yes", "1", "enable", "y"]:
+        return True
+    elif value.lower() in ["false", "no", "0", "disable", "n"]:
+        return False
+    else:
+        return default
+
+# Bot information
+SESSION = environ.get('SESSION', 'Media_search')
+API_ID = int(environ.get('API_ID', ''))
+API_HASH = environ.get('API_HASH', '')
+BOT_TOKEN = environ.get('BOT_TOKEN', "")
+
+# Bot settings
+CACHE_TIME = int(environ.get('CACHE_TIME', 300))
+USE_CAPTION_FILTER = bool(environ.get('USE_CAPTION_FILTER', True))
+
+PICS = (environ.get('PICS', 'https://graph.org/file/c221c729cb670bac2dcc7.jpg https://graph.org/file/23badff4397e477274878.jpg https://graph.org/file/135387d5b58925375ce4d.jpg https://graph.org/file/6f2b149e837e97a4202af.jpg https://graph.org/file/e6ba4818362f8c6727aee.jpg https://graph.org/file/5f89ae07575a5aa434b06.jpg https://graph.org/file/4048cc494ef6477354ac8.jpg https://graph.org/file/3bfacdf8c1f05debd717f.jpg https://graph.org/file/214e97c1976050f845050.jpg https://graph.org/file/80c64bc46d4a8e1153418.jpg https://graph.org/file/3573f125c6dd0f494e393.jpg https://graph.org/file/fadff820117e740bcc886.jpg https://graph.org/file/5c7374805470d5dae73e6.jpg https://graph.org/file/c7e7714ba803bc494eab6.jpg https://graph.org/file/6a68c8a65c5ffaa33aeca.jpg https://graph.org/file/955538487647c67dce193.jpg https://graph.org/file/37858b895e6d5ec39b5ad.jpg https://graph.org/file/1c15be412eb886ba1c8e3.jpg https://graph.org/file/76c99c8585ceee56b281f.jpg https://graph.org/file/586646a4fb50fda8edc19.jpg')).split()
+NOR_IMG = environ.get("NOR_IMG", "https://graph.org/file/46443096bc6895c74a716.jpg")
+MELCOW_VID = environ.get("MELCOW_VID", "https://graph.org/file/8aba1ce41b19476345ee5.mp4")
+SPELL_IMG = environ.get("SPELL_IMG", "https://graph.org/file/1226fefea8156af66c6aa.jpg")
+VRFIED_IMG = environ.get("VRFIED_IMG", "https://graph.org/file/778b523a3bd454f137d5c.jpg")
+VRFY_IMG = environ.get("VRFY_IMG", "https://graph.org/file/24b7779d9cbedd35d2111.jpg")
+STICKER = (environ.get('STICKER', 'CAACAgIAAxkBAAI1umTwDV-Z47josPSeFey5ajO2KIDJAAJeAQACEBptItNORzH8jWOyHgQ CAACAgIAAxkBAAI1wGTwDa4WaDvKd2QpUAGEAuE4o4DSAAJjAQACEBptImu6AmhfaYu5HgQ CAACAgIAAxkBAAI1w2TwDdZejNXv0wTdxK5XEeMBIRoeAAJZAQACEBptIh2VbDlfzkAfHgQ CAACAgIAAxkBAAI1xmTwDgeSS9fGQ2xDzWoIpuL3-pU3AAJgAQACPQ3oBD7wHLpauaCSHgQ CAACAgIAAxkBAAI2EmTwPLVz3JXPlPXp9_H7SzV78MExAAJoAQACEBptIvU3HCn2F6RvHgQ CAACAgIAAxkBAAI2FWTwPOJjf0e54joxMQvSGTk-TXQQAAKrAQACEBptIni-vpHMVGzHHgQ CAACAgIAAxkBAAI2GGTwPRAWryG9o4Ksj60XPqSOkvUdAAJSAQACEBptIi6eLItMsW1uHgQ CAACAgIAAxkBAAI2HmTwPn-M7Ot8C_keWYmRUWS1201HAAJmAQACEBptIgELm-YRAtc5HgQ')).split() #STICKER
+
+# Import Time
+BOT_START_TIME = time.time()
+
+# Admins, Channels & Users
+ADMINS = [int(admin) if id_pattern.search(admin) else admin for admin in environ.get('ADMINS', '6100029268').split()]
+CHANNELS = [int(ch) if id_pattern.search(ch) else ch for ch in environ.get('CHANNELS', '').split()]
+auth_users = [int(user) if id_pattern.search(user) else user for user in environ.get('AUTH_USERS', '').split()]
+AUTH_USERS = (auth_users + ADMINS) if auth_users else []
+PREMIUM_USER = [int(user) if id_pattern.search(user) else user for user in environ.get('PREMIUM_USER', '').split()]
+auth_channel = environ.get('AUTH_CHANNEL')
+auth_grp = environ.get('AUTH_GROUP')
+AUTH_CHANNEL = int(auth_channel) if auth_channel and id_pattern.search(auth_channel) else None
+AUTH_GROUPS = [int(ch) for ch in auth_grp.split()] if auth_grp else None
+support_chat_id = environ.get('SUPPORT_CHAT_ID', '')
+reqst_channel = environ.get('REQST_CHANNEL_ID', '')
+REQST_CHANNEL = int(reqst_channel) if reqst_channel and id_pattern.search(reqst_channel) else None
+SUPPORT_CHAT_ID = int(support_chat_id) if support_chat_id and id_pattern.search(support_chat_id) else None
+NO_RESULTS_MSG = bool(environ.get("NO_RESULTS_MSG", False))
+
+# MongoDB information
+DATABASE_URI = environ.get('DATABASE_URI', "")
+DATABASE_NAME = environ.get('DATABASE_NAME', "Cluster0")
+COLLECTION_NAME = environ.get('COLLECTION_NAME', 'Telegram_files')
+
+#stream feature
+STREAM_BIN = environ.get("STREAM_BIN", "") #Log channel/Bin Channel id -100xxxxxxx
+STREAM_URL = environ.get("STREAM_URL", "") # https://example.com/ (Your Stream Url)
+IS_STREAM = bool(STREAM_BIN and STREAM_URL)
+
+# Others
+VERIFY = bool(environ.get('VERIFY', False))
+SHORTLINK_URL = environ.get('SHORTLINK_URL', 'shareus.io')
+SHORTLINK_API = environ.get('SHORTLINK_API', 'GtzLyCHjhAPm4BDseFtX5UMDZ5B3')
+IS_SHORTLINK = bool(environ.get('IS_SHORTLINK', False))
+DELETE_CHANNELS = [int(dch) if id_pattern.search(dch) else dch for dch in environ.get('DELETE_CHANNELS', '0').split()]
+MAX_B_TN = environ.get("MAX_B_TN", "10")
+MAX_BTN = is_enabled((environ.get('MAX_BTN', "True")), True)
+PORT = environ.get("PORT", "8080")
+GRP_LNK = environ.get('GRP_LNK', 'https://t.me/movie_request_zone5')
+SPRT_CHNL = environ.get('SPRT_CHNL', 'https://t.me/elitecraft_support')
+CHNL_LNK = environ.get('CHNL_LNK', 'https://t.me/elitecraft_movies')
+TUTORIAL = environ.get('TUTORIAL', 'https://t.me/elitecraft_tutorial')
+IS_TUTORIAL = bool(environ.get('IS_TUTORIAL', True))
+HOW_TO_VERIFY = environ.get('HOW_TO_VERIFY', 'https://t.me/elitecraft_tutorial')
+MSG_ALRT = environ.get('MSG_ALRT', 'Wʜᴀᴛ Aʀᴇ Yᴏᴜ Lᴏᴏᴋɪɴɢ Aᴛ ?')
+LOG_CHANNEL = int(environ.get('LOG_CHANNEL', ''))
+SUPPORT_CHAT = environ.get('SUPPORT_CHAT', 'elitecraft_support')
+P_TTI_SHOW_OFF = is_enabled((environ.get('P_TTI_SHOW_OFF', "True")), True)
+IMDB = is_enabled((environ.get('IMDB', "True")), False)
+AUTO_FFILTER = is_enabled((environ.get('AUTO_FFILTER', "True")), True)
+AUTO_DELETE = is_enabled((environ.get('AUTO_DELETE', "True")), True)
+SINGLE_BUTTON = is_enabled((environ.get('SINGLE_BUTTON', "True")), True)
+CUSTOM_FILE_CAPTION = environ.get("CUSTOM_FILE_CAPTION", f"{script.CAPTION}")
+BATCH_FILE_CAPTION = environ.get("BATCH_FILE_CAPTION", CUSTOM_FILE_CAPTION)
+IMDB_TEMPLATE = environ.get("IMDB_TEMPLATE", f"{script.IMDB_TEMPLATE_TXT}")
+LONG_IMDB_DESCRIPTION = is_enabled(environ.get("LONG_IMDB_DESCRIPTION", "False"), False)
+SPELL_CHECK_REPLY = is_enabled(environ.get("SPELL_CHECK_REPLY", "True"), True)
+MAX_LIST_ELM = environ.get("MAX_LIST_ELM", None)
+INDEX_REQ_CHANNEL = int(environ.get('INDEX_REQ_CHANNEL', LOG_CHANNEL))
+FILE_STORE_CHANNEL = [int(ch) for ch in (environ.get('FILE_STORE_CHANNEL', '')).split()]
+MELCOW_NEW_USERS = is_enabled((environ.get('MELCOW_NEW_USERS', "True")), True)
+PROTECT_CONTENT = is_enabled((environ.get('PROTECT_CONTENT', "False")), False)
+PUBLIC_FILE_STORE = is_enabled((environ.get('PUBLIC_FILE_STORE', "True")), True)
+
+LANGUAGES = ["malayalam", "mal", "tamil", "tam" ,"english", "eng", "hindi", "hin", "telugu", "tel", "kannada", "kan"]
+
+SEASONS = ["season 1" , "season 2" , "season 3" , "season 4", "season 5" , "season 6" , "season 7" , "season 8" , "season 9" , "season 10"]
+
+QUALITY = ["360P" , "480P" , "720P" , "1080P", "1440P" , "2160P"]
+
+LOG_STR = "Current Cusomized Configurations are:-\n"
+LOG_STR += ("IMDB Results are enabled, Bot will be showing imdb details for you queries.\n" if IMDB else "IMBD Results are disabled.\n")
+LOG_STR += ("P_TTI_SHOW_OFF found , Users will be redirected to send /start to Bot PM instead of sending file file directly\n" if P_TTI_SHOW_OFF else "P_TTI_SHOW_OFF is disabled files will be send in PM, instead of sending start.\n")
+LOG_STR += ("SINGLE_BUTTON is Found, filename and files size will be shown in a single button instead of two separate buttons\n" if SINGLE_BUTTON else "SINGLE_BUTTON is disabled , filename and file_sixe will be shown as different buttons\n")
+LOG_STR += (f"CUSTOM_FILE_CAPTION enabled with value {CUSTOM_FILE_CAPTION}, your files will be send along with this customized caption.\n" if CUSTOM_FILE_CAPTION else "No CUSTOM_FILE_CAPTION Found, Default captions of file will be used.\n")
+LOG_STR += ("Long IMDB storyline enabled." if LONG_IMDB_DESCRIPTION else "LONG_IMDB_DESCRIPTION is disabled , Plot will be shorter.\n")
+LOG_STR += ("Spell Check Mode Is Enabled, bot will be suggesting related movies if movie not found\n" if SPELL_CHECK_REPLY else "SPELL_CHECK_REPLY Mode disabled\n")
+LOG_STR += (f"MAX_LIST_ELM Found, long list will be shortened to first {MAX_LIST_ELM} elements\n" if MAX_LIST_ELM else "Full List of casts and crew will be shown in imdb template, restrict them by adding a value to MAX_LIST_ELM\n")
+LOG_STR += f"Your current IMDB template is {IMDB_TEMPLATE}"
